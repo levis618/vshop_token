@@ -26,27 +26,39 @@ const routes = [
     name: 'home',
     path: '/home',
     component: Home,
-    // props: (route) => ({ id: route.params.id }),
-    props: true, // 将所有params参数转换成标签属性传递给子路由组件
     meta: {
-      hasFoot: true, // 设置是否显示底部导航
-      title: '标题', // 设置标题文字
+      hasFooterGuide: true,
     },
+    // props: (route) => ({ id: route.params.id }),
+    // props: true, // 将所有params参数转换成标签属性传递给子路由组件
+    // meta: {
+    //   hasFoot: true, // 设置是否显示底部导航
+    //   title: '标题', // 设置标题文字
+    // },
   },
   {
     name: 'search',
     path: '/search',
     component: Search,
+    meta: {
+      hasFooterGuide: true,
+    },
   },
   {
     name: 'order',
     path: '/order',
     component: Order,
+    meta: {
+      hasFooterGuide: true,
+    },
   },
   {
     name: 'profile',
     path: '/profile',
     component: Profile,
+    meta: {
+      hasFooterGuide: true,
+    },
   },
   {
     name: 'shop',
