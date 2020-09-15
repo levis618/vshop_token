@@ -1,26 +1,22 @@
 <template>
   <nav class="msite_nav">
-    <div class="swiper-container" v-if="categorysList.length">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" v-for="(categorys, index) in categorysList" :key="index">
-          <div class="link_to_food" v-for="category in categorys" :key="category.id">
-            <div class="food_container">
-              <img :src="baseImagesURL + category.image_url" />
-            </div>
-            <span>{{ category.title }}</span>
+    <swiper :options="swiperOptions" v-if="categorys.length">
+      <swiper-slide v-for="(categorys, index) in categorysList" :key="index">
+        <div class="link_to_food" v-for="category in categorys" :key="category.id">
+          <div class="food_container">
+            <img :src="image_url + category.image_url" />
           </div>
+          <span>{{ category.title }}</span>
         </div>
-      </div>
-      <!-- Add Pagination -->
-      <div class="swiper-pagination"></div>
-    </div>
+      </swiper-slide>
+      <div class="swiper-pagination" slot="pagination"></div>
+    </swiper>
   </nav>
-</template>
 </template>
 
 <script>
-// 以new的方式创建Swiper
-import Swiper from 'swiper'
+// 引入vue-awesome-swiper以组件的方式创建Swiper
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 // swiper@5.4.5
 import 'swiper/css/swiper.css'
 
@@ -30,12 +26,21 @@ export default {
   props: {
     categorys: {
       type: Array,
-      default: []
+      default: [],
     },
   },
   data() {
     return {
-      baseImagesURL: 'https://fuss10.elemecdn.com',
+      swiperOptions: {
+        bulletActiveClass: 'my-bullet-active',
+        pagination: {
+          el: '.swiper-pagination',
+        },
+        // loop: false,
+        // observer: true,
+        // observeParents: true,
+      },
+      image_url: 'https://fuss10.elemecdn.com/',
     }
   },
   computed: {
@@ -43,23 +48,21 @@ export default {
       return chunk(this.categorys, 8)
     },
   },
-  methods: {
-    initSwiper() {
-      this.navSwiper = new Swiper('.swiper-container', {
-        pagination: {
-          el: '.swiper-pagination',
-        },
-      })
-    },
-  },
-  async mounted() {
-    this.initSwiper()
+  async mounted() {},
+  components: {
+    Swiper,
+    SwiperSlide,
   },
 }
 </script>
 
 <style lang="stylus" scoped>
 @import '../../assets/css/mixins.styl';
+
+
+.my-bullet-active{
+  background: #000;
+}
 
 .msite_nav {
   bottom-border-1px(#e4e4e4);

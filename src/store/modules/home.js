@@ -1,15 +1,24 @@
-import { REC_ADDRESS } from '../mutation-types.js'
-import { reqAddress } from '../../api/index.js'
+import { REC_ADDRESS, REC_CATEGORYS, REC_SHOPS } from '../mutation-types.js'
+import { reqAddress, reqCategorys, reqShops } from '../../api/index.js'
 
 const state = {
   latitude: 40.10038, // 纬度
   longitude: 116.36867, // 经度
   address: {},
+  categorys: [],
+  shops: [],
 }
 const getters = {}
 const mutations = {
   [REC_ADDRESS](state, { address }) {
     state.address = address
+  },
+  [REC_CATEGORYS](state, { categorys }) {
+    state.categorys = categorys
+  },
+
+  [REC_SHOPS](state, { shops }) {
+    state.shops = shops
   },
 }
 const actions = {
@@ -18,6 +27,18 @@ const actions = {
     const { code, data } = await reqAddress(geohash)
     if (!code) {
       commit(REC_ADDRESS, { address: data })
+    }
+  },
+  async getCategorys({ commit }) {
+    const { code, data } = await reqCategorys()
+    if (!code) {
+      commit(REC_CATEGORYS, { categorys: data })
+    }
+  },
+  async getShops({ commit, state }) {
+    const { code, data } = await reqShops(state.latitude, state.longitude)
+    if (!code) {
+      commit(REC_SHOPS, { shops: data })
     }
   },
 }

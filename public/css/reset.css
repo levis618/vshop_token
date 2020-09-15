@@ -96,7 +96,7 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-input, select, textarea {
+input, select, textarea, button {
   outline: 0;
 }
 * {

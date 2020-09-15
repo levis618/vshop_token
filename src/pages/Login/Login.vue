@@ -38,7 +38,7 @@
             </section>
             <section class="login_verification">
               <input
-                type="text"
+                type="tel"
                 maxlength="8"
                 placeholder="验证码"
                 v-model="code"

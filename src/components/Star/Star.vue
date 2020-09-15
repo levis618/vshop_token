@@ -1,20 +1,45 @@
 <template>
   <div class="star star-24">
-    <span class="star-item on"></span>
-    <span class="star-item on"></span>
-    <span class="star-item on"></span>
-    <span class="star-item half"></span>
-    <span class="star-item off"></span>
+    <span class="star-item on" v-for="(sc, index) in starClasses" :class="sc" :key="index"></span>
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    score: {
+      type: Number,
+      default: 0,
+    },
+    size: {
+      type: Number,
+      default: 24,
+    },
+  },
+  computed: {
+    starClasses() {
+      const { score } = this
+      let classes = []
+      let scoreInt = Math.floor(score)
+      // 加几个on
+      for (let index = 0; index < scoreInt; index++) {
+        classes.push('on')
+      }
+      // 加1个或0个half
+      if (score * 10 - scoreInt * 10 >= 5) {
+        classes.push('half')
+      }
+      // 剩余的加off
+      for (let index = 0; index < 5 - classes.length; index++) {
+        classes.push('off')
+      }
+      return classes
+    },
+  },
 }
 </script>
 
-<style lang="stylus" >
+<style lang="stylus">
 @import '../../assets/css/mixins.styl';
 
 // 星星的样式

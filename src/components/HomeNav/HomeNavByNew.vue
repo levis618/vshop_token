@@ -10,6 +10,56 @@
             <span>{{ category.title }}</span>
           </div>
         </div>
+        <!-- <div class="swiper-slide">
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/9.jpg" />
+            </div>
+            <span>甜品饮品</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/10.jpg" />
+            </div>
+            <span>商超便利</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/11.jpg" />
+            </div>
+            <span>美食</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/12.jpg" />
+            </div>
+            <span>简餐</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/13.jpg" />
+            </div>
+            <span>新店特惠</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/14.jpg" />
+            </div>
+            <span>准时达</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/1.jpg" />
+            </div>
+            <span>预订早餐</span>
+          </div>
+          <div class="link_to_food">
+            <div class="food_container">
+              <img src="./images/nav/2.jpg" />
+            </div>
+            <span>土豪推荐</span>
+          </div>
+        </div> -->
       </div>
       <!-- Add Pagination -->
       <div class="swiper-pagination"></div>
@@ -26,19 +76,18 @@ import 'swiper/css/swiper.css'
 
 import { chunk } from 'lodash-es'
 
+import { mapState } from 'vuex'
+
 export default {
-  props: {
-    categorys: {
-      type: Array,
-      default: []
-    },
-  },
   data() {
     return {
       baseImagesURL: 'https://fuss10.elemecdn.com',
     }
   },
   computed: {
+    ...mapState({
+      categorys: (state) => state.home.categorys,
+    }),
     categorysList() {
       return chunk(this.categorys, 8)
     },
@@ -53,6 +102,8 @@ export default {
     },
   },
   async mounted() {
+    this.categorys.length || (await this.$store.dispatch('getCategorys'))
+
     this.initSwiper()
   },
 }
@@ -63,6 +114,7 @@ export default {
 
 .msite_nav {
   bottom-border-1px(#e4e4e4);
+  margin-top: 45px;
   height: 200px;
   background: #fff;
 

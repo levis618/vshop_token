@@ -2,36 +2,16 @@
   <header class="header">
     <slot name="left" />
     <span class="header_title">
-      <span class="header_title_text ellipsis">{{title}}</span>
+      <span class="header_title_text ellipsis">{{ title }}</span>
     </span>
     <slot name="right" />
   </header>
-  <!-- <header class="header">
-    <span class="header_search">
-      <i class="iconfont icon-sousuo"></i>
-    </span>
-    <span class="header_title">
-      <span class="header_title_text ellipsis">标题</span>
-    </span>
-    <span
-      class="header_login"
-      @click="$router.push('/login')"
-    >
-      <span class="header_login_text">登录|注册</span>
-      <span
-        class="header_login_text"
-        style="display:none"
-      >
-        <i class="iconfont icon-person"></i>
-      </span>
-    </span>
-  </header> -->
 </template>
 
 <script>
 export default {
   props: {
-    title: String
+    title: String,
   },
 }
 </script>

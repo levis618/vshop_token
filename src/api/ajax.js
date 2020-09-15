@@ -4,6 +4,11 @@
 import axios from 'axios'
 import qs from 'qs'
 // import { MessageBox, Toast } from 'mint-ui'
+import { Indicator } from 'mint-ui'
+
+// import NProgress from 'nprogress'
+// import 'nprogress/nprogress.css'
+
 import store from '../store'
 // import router from '../router'
 const IS_DEV = process.env.NODE_ENV === 'development'
@@ -18,6 +23,7 @@ const instance = axios.create({
 添加请求拦截器, 处理Post请求参数(从对象转换为urlencoding)
 */
 instance.interceptors.request.use((config) => {
+  Indicator.open()
   // 处理Post请求参数(从对象转换为urlencoding)
   if (config.method.toUpperCase() === 'POST' && config.data instanceof Object) {
     config.data = qs.stringify(config.data) // username=tom&pwd=123
@@ -46,6 +52,7 @@ instance.interceptors.request.use((config) => {
 */
 instance.interceptors.response.use(
   (response) => {
+    Indicator.close()
     return response.data
   }
   // (error) => {
