@@ -1,41 +1,25 @@
 <template>
   <!-- 底部导航 -->
   <footer class="footer_guide">
-    <span
-      class="guide_item"
-      :class="{'on':$route.path === '/home'}"
-      @click="$router.push('/home')"
-    >
+    <span class="guide_item" :class="{ on: $route.path === '/home' }" @click="goto('/home')">
       <span>
         <i class="iconfont icon-waimai"></i>
       </span>
       <span>外卖</span>
     </span>
-    <span
-      class="guide_item"
-      :class="{'on':$route.path === '/search'}"
-      @click="$router.push('/search')"
-    >
+    <span class="guide_item" :class="{ on: $route.path === '/search' }" @click="goto('/search')">
       <span>
         <i class="iconfont icon-search"></i>
       </span>
       <span>搜索</span>
     </span>
-    <span
-      class="guide_item"
-      :class="{'on':$route.path === '/order'}"
-      @click="$router.push('/order')"
-    >
+    <span class="guide_item" :class="{ on: $route.path === '/order' }" @click="goto('/order')">
       <span>
         <i class="iconfont icon-dingdan"></i>
       </span>
       <span>订单</span>
     </span>
-    <span
-      class="guide_item"
-      :class="{'on':$route.path === '/profile'}"
-      @click="$router.push('/profile')"
-    >
+    <span class="guide_item" :class="{ on: $route.path === '/profile' }" @click="goto('/profile')">
       <span>
         <i class="iconfont icon-geren"></i>
       </span>
@@ -46,6 +30,12 @@
 
 <script>
 export default {
+  methods: {
+    goto(path) {
+      if (path === this.$route.path) return
+      this.$router.replace(path)
+    },
+  },
 }
 </script>
 

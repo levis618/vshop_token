@@ -9,6 +9,9 @@ Vue.config.productionTip = false
 import fastClick from 'fastclick'
 fastClick.attach(document.body)
 
+// 导入表单验证
+import './validate.js'
+
 new Vue({
   router,
   store,

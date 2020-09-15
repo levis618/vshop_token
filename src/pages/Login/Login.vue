@@ -4,84 +4,119 @@
       <div class="login_header">
         <h2 class="login_logo">硅谷外卖</h2>
         <div class="login_header_title">
-          <a
-            href="javascript:;"
-            class="on"
-          >短信登录</a>
-          <a href="javascript:;">密码登录</a>
+          <a href="javascript:;" :class="{ on: loginType }" @click="loginType = !loginType"
+            >短信登录</a
+          >
+          <a href="javascript:;" :class="{ on: !loginType }" @click="loginType = !loginType"
+            >密码登录</a
+          >
         </div>
       </div>
       <div class="login_content">
         <form>
-          <div class="on">
+          <div :class="{ on: loginType }">
             <section class="login_message">
               <input
                 type="tel"
                 maxlength="11"
                 placeholder="手机号"
-              >
+                v-model="phone"
+                name="phone"
+                v-validate="'required|mobile'"
+              />
               <button
-                disabled="disabled"
+                :disabled="!isRightPhone"
                 class="get_verification"
-              >获取验证码</button>
+                :class="{ rightphone: isRightPhone }"
+                @click.prevent="sendcode"
+              >
+                {{ timer ? `短信已发送(${timer})s` : '获取验证码' }}
+              </button>
+              <span style="color: red;" v-show="errors.has('phone')">{{
+                errors.first('phone')
+              }}</span>
             </section>
             <section class="login_verification">
               <input
-                type="tel"
+                type="text"
                 maxlength="8"
                 placeholder="验证码"
-              >
+                v-model="code"
+                name="code"
+                v-validate="{ required: true, regex: /^\d{6}$/ }"
+              />
+              <span style="color: red;" v-show="errors.has('code')">{{
+                errors.first('code')
+              }}</span>
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
               <a href="javascript:;">《用户服务协议》</a>
             </section>
           </div>
-          <div>
+          <div :class="{ on: !loginType }">
             <section>
               <section class="login_message">
                 <input
-                  type="tel"
+                  type="text"
                   maxlength="11"
                   placeholder="手机/邮箱/用户名"
-                >
+                  v-model="name"
+                  name="name"
+                  v-validate="'required'"
+                />
+                <span style="color: red;" v-show="errors.has('name')">{{
+                  errors.first('name')
+                }}</span>
               </section>
               <section class="login_verification">
                 <input
-                  type="tel"
+                  :type="!isShowPwd ? 'password' : 'text'"
                   maxlength="8"
                   placeholder="密码"
+                  v-model="pwd"
+                  name="pwd"
+                  v-validate="'required'"
+                />
+                <div
+                  class="switch_button"
+                  :class="isShowPwd ? 'on' : 'off'"
+                  @click="isShowPwd = !isShowPwd"
                 >
-                <div class="switch_button off">
-                  <div class="switch_circle"></div>
-                  <span class="switch_text">...</span>
+                  <div class="switch_circle" :class="{ right: isShowPwd }"></div>
+                  <span class="switch_text">{{ isShowPwd ? 'abc' : '...' }}</span>
                 </div>
+                <span style="color: red;" v-show="errors.has('pwd')">{{
+                  errors.first('pwd')
+                }}</span>
               </section>
               <section class="login_message">
                 <input
                   type="text"
                   maxlength="11"
                   placeholder="验证码"
-                >
+                  v-model="captcha"
+                  name="captcha"
+                  v-validate="'required'"
+                />
                 <img
                   class="get_verification"
-                  src="./images/captcha.svg"
+                  src="http://localhost:4000/captcha"
                   alt="captcha"
-                >
+                  ref="captcha"
+                  @click="refreshCaptcha"
+                />
+                <span style="color: red;" v-show="errors.has('captcha')">{{
+                  errors.first('captcha')
+                }}</span>
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click.prevent="login">登录</button>
         </form>
-        <a
-          href="javascript:;"
-          class="about_us"
-        >关于我们</a>
+        <a href="javascript:;" class="about_us" @click="loginout">关于我们</a>
       </div>
-      <router-link
-        to="/profile"
-        class="go_back"
-      >
+      <router-link to="/profile" class="go_back">
         <i class="iconfont icon-jiantou2"></i>
       </router-link>
     </div>
@@ -89,8 +124,102 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { MessageBox, Toast } from 'mint-ui'
+import { reqLoginPwd, reqLoginSms, reqSendCode } from '../../api/index.js'
 export default {
+  data() {
+    return {
+      loginType: false, // 登录方式，true为短信登录，false为密码登录
+      name: '', // 用户名
+      pwd: '', // 密码
+      captcha: '', // 图形验证码
+      phone: '', // 手机号
+      code: '', // 短信验证吗
+      timer: 0, // 计时器
+      isShowPwd: false, // 是否显示密码
+    }
+  },
+  computed: {
+    isRightPhone() {
+      return /^1[3456789]\d{9}$/.test(this.phone)
+    },
+    ...mapState({
+      userId: (state) => state.user.info._id,
+    }),
+  },
+  methods: {
+    // 退出登录
+    loginout() {
+      this.$store.dispatch('loginout')
+    },
+    // 登录
+    async login() {
+      const { loginType } = this
+      let names
 
+      if (loginType) {
+        names = ['phone', 'code']
+      } else {
+        names = ['name', 'pwd', 'captcha']
+      }
+      const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
+      if (success) {
+        const { name, pwd, captcha, phone, code } = this
+        let result
+        if (loginType) {
+          // 短信登录
+          result = await reqLoginSms(phone, code)
+          this.timer = 0
+        } else {
+          // 密码登录
+          result = await reqLoginPwd(name, pwd, captcha)
+          if (result.code) {
+            this.refreshCaptcha()
+            this.captcha = ''
+          }
+        }
+        if (!result.code) {
+          this.$store.dispatch('Login', result.data)
+          this.$router.replace('/profile')
+        } else {
+          MessageBox.alert(result.msg)
+        }
+      }
+    },
+    // 获取短信验证码
+    async sendcode() {
+      this.timer = 5
+      this.timerId = setInterval(() => {
+        this.timer--
+        if (this.timer <= 0) {
+          clearInterval(this.timerId)
+        }
+      }, 1000)
+      const { code, msg } = await reqSendCode(this.phone)
+      if (!code) {
+        Toast('短信发送成功！')
+      } else {
+        this.timer = 0
+        MessageBox.alert(msg)
+      }
+    },
+    // 获取新的图形验证码
+    refreshCaptcha() {
+      this.$refs.captcha.src = this.$refs.captcha.src + '?time=' + new Date()
+    },
+  },
+  mounted() {},
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      const isLogin = !!vm.$store.state.user.token
+      if (isLogin) {
+        next('/profile')
+      } else {
+        next()
+      }
+    })
+  },
 }
 </script>
 
@@ -175,6 +304,9 @@ export default {
               color: #ccc;
               font-size: 14px;
               background: transparent;
+              &.rightphone{
+                color :#000
+              }
             }
           }
 
@@ -208,7 +340,6 @@ export default {
                   color: #ddd;
                 }
               }
-
               &.on {
                 background: #02a774;
               }
@@ -225,6 +356,9 @@ export default {
                 background: #fff;
                 box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
                 transition: transform 0.3s;
+                &.right{
+                  transform translateX(27px)
+                }
               }
             }
           }
