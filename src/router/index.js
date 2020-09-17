@@ -13,15 +13,15 @@ const router = new VueRouter({
   routes,
 })
 
-// router.beforeEach((to, from, next) => {
-//   const paths = ['/home', '/shop/goods', '/shop/ratings', '/shop/info']
-//   const path = to.path
-//   const hasToken = !!store.state.user.token
-//   if (paths.indexOf(path) !== -1 && !hasToken) {
-//     router.replace('/login')
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const paths = ['/home', '/shop/goods', '/shop/ratings', '/shop/info']
+  const path = to.path
+  const hasToken = !!store.state.user.token
+  if (paths.indexOf(path) !== -1 && !hasToken) {
+    router.replace('/login')
+  } else {
+    next()
+  }
+})
 
 export default router

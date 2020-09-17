@@ -15,15 +15,22 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 
 // 创建一个新的Axios的实例(功能上)
 const instance = axios.create({
-  timeout: 10000, // 设置请求超时时间为10s
+  timeout: 1000000, // 设置请求超时时间为10s
   baseURL: IS_DEV ? '' : '/api', // 所有请求都有一个基础路径
 })
+
+let isLoading = []
 
 /* 
 添加请求拦截器, 处理Post请求参数(从对象转换为urlencoding)
 */
 instance.interceptors.request.use((config) => {
-  Indicator.open()
+  if (!isLoading.length) {
+    Indicator.open()
+  }
+  isLoading.push('1')
+  // Indicator.open()
+
   // 处理Post请求参数(从对象转换为urlencoding)
   if (config.method.toUpperCase() === 'POST' && config.data instanceof Object) {
     config.data = qs.stringify(config.data) // username=tom&pwd=123
@@ -52,7 +59,16 @@ instance.interceptors.request.use((config) => {
 */
 instance.interceptors.response.use(
   (response) => {
-    Indicator.close()
+    setTimeout(() => {
+      if (isLoading.length) {
+        isLoading.pop()
+      }
+      if (!isLoading.length) {
+        Indicator.close()
+      }
+    }, 0)
+    // Indicator.close()
+
     return response.data
   }
   // (error) => {

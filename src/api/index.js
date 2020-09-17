@@ -21,3 +21,8 @@ export const reqCategorys = () => ajax.get(`${BASE_URL}/index_category`)
 // 3、根据经纬度获取商铺列表
 export const reqShops = (latitude, longitude) =>
   ajax.get(`${BASE_URL}/shops`, { params: { latitude, longitude } })
+
+// 获取商家食品列表
+export const reqShopGoods = () => ajax.get(`${BASE_URL}/goods`)
+export const reqShopRatings = () => ajax.get(`${BASE_URL}/ratings`)
+export const reqShopInfo = () => ajax.get(`${BASE_URL}/info`)

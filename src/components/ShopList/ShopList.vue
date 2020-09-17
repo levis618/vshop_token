@@ -5,11 +5,22 @@
       <span class="shop_header_title">附近商家</span>
     </div>
     <div class="shop_container">
-      <ul class="shop_list" v-if="shops.length">
-        <li class="shop_li" v-for="shop in shops" :key="shop.id" @click="$router.push('/shop')">
+      <ul
+        class="shop_list"
+        v-if="shops.length"
+      >
+        <li
+          class="shop_li"
+          v-for="shop in shops"
+          :key="shop.id"
+          @click="goto('/shop/goods/'+shop.id)"
+        >
           <a>
             <div class="shop_left">
-              <img class="shop_img" :src="baseImageURL + shop.image_path" />
+              <img
+                class="shop_img"
+                :src="baseImageURL + shop.image_path"
+              />
             </div>
             <div class="shop_right">
               <section class="shop_detail_header">
@@ -17,15 +28,25 @@
                 <!-- <ul class="shop_detail_ul" v-if="shop.supports">
                   <li class="supports">{{ shop.supports[0].icon_name }}</li>
                 </ul> -->
-                <ul class="shop_detail_ul" v-if="shop.supports">
-                  <li class="supports" v-for="support in shop.supports" :key="support._id">
+                <ul
+                  class="shop_detail_ul"
+                  v-if="shop.supports"
+                >
+                  <li
+                    class="supports"
+                    v-for="support in shop.supports"
+                    :key="support._id"
+                  >
                     {{ support.icon_name }}
                   </li>
                 </ul>
               </section>
               <section class="shop_rating_order">
                 <section class="shop_rating_order_left">
-                  <Star :score="shop.rating" :size="24" />
+                  <Star
+                    :score="shop.rating"
+                    :size="24"
+                  />
                   <div class="rating_section">
                     {{ shop.rating }}
                   </div>
@@ -60,16 +81,16 @@ export default {
       default: [],
     },
   },
-  data() {
+  data () {
     return {
       baseImageURL: 'https://fuss10.elemecdn.com',
     }
   },
-  // computed: {
-  //   ...mapState({
-  //     shops: (state) => state.home.shops,
-  //   }),
-  // },
+  methods: {
+    goto (path) {
+      this.$router.push(path)
+    }
+  },
   components: {
     Star,
   },
@@ -106,8 +127,9 @@ export default {
       .shop_li {
         bottom-border-1px(#f1f1f1);
         width: 100%;
-        &:last-child::after{
-          height :0;
+
+        &:last-child::after {
+          height: 0;
         }
 
         >a {

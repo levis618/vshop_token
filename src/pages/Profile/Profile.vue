@@ -3,12 +3,19 @@
     <section class="profile">
       <HeaderTop title="我的" />
       <section class="profile-number">
-        <a href="javascript:" class="profile-link" @click="go">
+        <a
+          href="javascript:"
+          class="profile-link"
+          @click="go"
+        >
           <div class="profile_image">
             <i class="iconfont icon-person"></i>
           </div>
           <div class="user-info">
-            <p class="user-info-top" v-if="userinfo.name">
+            <p
+              class="user-info-top"
+              v-if="userinfo.name"
+            >
               {{ userinfo.name ? userinfo.name : '登录/注册' }}
             </p>
             <p v-else>
@@ -27,15 +34,24 @@
       </section>
       <section class="profile_info_data border-1px">
         <ul class="info_data_list">
-          <a href="javascript:" class="info_data_link">
+          <a
+            href="javascript:"
+            class="info_data_link"
+          >
             <span class="info_data_top"><span>0.00</span>元</span>
             <span class="info_data_bottom">我的余额</span>
           </a>
-          <a href="javascript:" class="info_data_link">
+          <a
+            href="javascript:"
+            class="info_data_link"
+          >
             <span class="info_data_top"><span>0</span>个</span>
             <span class="info_data_bottom">我的优惠</span>
           </a>
-          <a href="javascript:" class="info_data_link">
+          <a
+            href="javascript:"
+            class="info_data_link"
+          >
             <span class="info_data_top"><span>0</span>分</span>
             <span class="info_data_bottom">我的积分</span>
           </a>
@@ -43,7 +59,10 @@
       </section>
       <section class="profile_my_order border-1px">
         <!-- 我的订单 -->
-        <a href="javascript:" class="my_order">
+        <a
+          href="javascript:"
+          class="my_order"
+        >
           <span>
             <i class="iconfont icon-order-s"></i>
           </span>
@@ -55,7 +74,10 @@
           </div>
         </a>
         <!-- 积分商城 -->
-        <a href="javascript:" class="my_order">
+        <a
+          href="javascript:"
+          class="my_order"
+        >
           <span>
             <i class="iconfont icon-jifen"></i>
           </span>
@@ -67,7 +89,10 @@
           </div>
         </a>
         <!-- 硅谷外卖会员卡 -->
-        <a href="javascript:" class="my_order">
+        <a
+          href="javascript:"
+          class="my_order"
+        >
           <span>
             <i class="iconfont icon-vip"></i>
           </span>
@@ -81,7 +106,10 @@
       </section>
       <section class="profile_my_order border-1px">
         <!-- 服务中心 -->
-        <a href="javascript:" class="my_order">
+        <a
+          href="javascript:"
+          class="my_order"
+        >
           <span>
             <i class="iconfont icon-fuwu"></i>
           </span>
@@ -93,8 +121,15 @@
           </div>
         </a>
       </section>
-      <section class="profile_my_order border-1px" v-if="userinfo._id">
-        <Button type="danger" size="large" @click="loginout">登出</Button>
+      <section
+        class="profile_my_order border-1px"
+        v-if="userinfo._id"
+      >
+        <Button
+          type="danger"
+          size="large"
+          @click="loginout"
+        >登出</Button>
       </section>
     </section>
   </div>
@@ -112,25 +147,25 @@ export default {
     }),
   },
   methods: {
-    go() {
+    go () {
       if (this.userinfo._id) {
         this.$router.push('/home')
       } else {
         this.$router.push('/login')
       }
     },
-    loginout() {
+    loginout () {
       MessageBox.confirm('确定要退出登录?').then(
         (action) => {
           this.$store.dispatch('loginout')
           this.$router.push('/login')
         },
-        () => {}
+        () => { }
       )
     },
   },
   components: { HeaderTop, Button },
-  mounted() {},
+  mounted () { },
 }
 </script>
 
@@ -143,7 +178,12 @@ export default {
   overflow: hidden;
 
   .profile-number {
-    margin-top: 45.5px;
+    margin-top: 45px;
+    top-border-1px(#fff);
+
+    &::before {
+      z-index: 1;
+    }
 
     .profile-link {
       clearFix();

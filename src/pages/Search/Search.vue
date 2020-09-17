@@ -103,7 +103,7 @@ export default {
         display: flex;
         justify-content: center;
         padding: 10px;
-        border-bottom: 1px solid $bc;
+        bottom-border-1px();
 
         .item_left {
           margin-right: 10px;

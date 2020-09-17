@@ -54,28 +54,27 @@ const routes = [
     },
   },
   {
-    name: 'shop',
     path: '/shop',
     component: Shop,
     children: [
       {
         name: 'shopGoods',
-        path: 'goods',
+        path: 'goods/:id',
         component: Goods,
       },
       {
         name: 'shopRatings',
-        path: 'ratings',
+        path: 'ratings/:id',
         component: Ratings,
       },
       {
         name: 'shopInfo',
-        path: 'info',
+        path: 'info/:id',
         component: Info,
       },
       {
-        path: '/shop',
-        redirect: '/shop/goods',
+        path: '',
+        redirect: 'shopGoods',
       },
     ],
   },

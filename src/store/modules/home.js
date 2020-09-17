@@ -1,6 +1,8 @@
 import { REC_ADDRESS, REC_CATEGORYS, REC_SHOPS } from '../mutation-types.js'
 import { reqAddress, reqCategorys, reqShops } from '../../api/index.js'
 
+const { v4: uuidv4 } = require('uuid')
+
 const state = {
   latitude: 40.10038, // 纬度
   longitude: 116.36867, // 经度
@@ -38,7 +40,20 @@ const actions = {
   async getShops({ commit, state }) {
     const { code, data } = await reqShops(state.latitude, state.longitude)
     if (!code) {
+      data.forEach((value) => {
+        value.id = uuidv4()
+      })
       commit(REC_SHOPS, { shops: data })
+    }
+  },
+  async addShops({ commit, state }) {
+    let { code, data } = await reqShops(state.latitude, state.longitude)
+    if (!code) {
+      data = data.slice(0, 10)
+      data.forEach((value) => {
+        value.id = uuidv4()
+      })
+      commit(REC_SHOPS, { shops: [...state.shops, ...data] })
     }
   },
 }

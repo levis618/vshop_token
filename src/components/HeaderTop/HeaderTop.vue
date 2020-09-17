@@ -4,14 +4,23 @@
     <span class="header_title">
       <span class="header_title_text ellipsis">{{ title }}</span>
     </span>
-    <slot name="right" />
+    <slot
+      name="right"
+      :isLogin="isLogin"
+    />
   </header>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     title: String,
+  },
+  computed: {
+    ...mapState({
+      isLogin: state => state.user.token ? true : false
+    })
   },
 }
 </script>
