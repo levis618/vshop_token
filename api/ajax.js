@@ -1,3 +1,6 @@
+/* 
+封装axios的模块 for session
+*/
 import axios from 'axios'
 import qs from 'querystring' // 若服务端只接收urlencoded形式，将传递过来的参数对象转换成urlencoded形式
 

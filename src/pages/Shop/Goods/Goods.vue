@@ -52,7 +52,11 @@
                   <span class="now">￥9</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  CartControl
+                  <div class="cartcontrol">
+                    <div class="iconfont icon-remove_circle_outline"></div>
+                    <div class="cart-count">1</div>
+                    <div class="iconfont icon-add_circle"></div>
+                  </div>
                 </div>
               </div>
             </li>
@@ -130,6 +134,17 @@
               还差￥10 元起送
             </div>
           </div>
+          <!-- <div class="content-right">
+            <div class="pay not-enough">
+              ￥20元起送
+            </div>
+            <div class="pay not-enough">
+              还差￥10 元起送
+            </div>
+            <div class="pay enough">
+              去结算
+            </div>
+          </div> -->
         </div>
         <div
           class="shopcart-list"
@@ -205,6 +220,45 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../assets/css/mixins.styl';
+
+.cartcontrol {
+  font-size: 0;
+
+  .cart-decrease {
+    display: inline-block;
+    padding: 6px;
+    line-height: 24px;
+    font-size: 24px;
+    color: rgb(0, 160, 220);
+  }
+
+  .icon-remove_circle_outline {
+    display: inline-block;
+    padding: 6px;
+    line-height: 24px;
+    font-size: 24px;
+    color: $green;
+  }
+
+  .cart-count {
+    display: inline-block;
+    vertical-align: top;
+    width: 12px;
+    padding-top: 6px;
+    line-height: 24px;
+    text-align: center;
+    font-size: 10px;
+    color: rgb(147, 153, 159);
+  }
+
+  .icon-add_circle {
+    display: inline-block;
+    padding: 6px;
+    line-height: 24px;
+    font-size: 24px;
+    color: $green;
+  }
+}
 
 .food {
   position: fixed;
