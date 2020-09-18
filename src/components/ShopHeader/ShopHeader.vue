@@ -6,7 +6,7 @@
     >
       <a
         class="back"
-        @click="$router.back()"
+        @click="$router.push('/home')"
       >
         <i class="iconfont icon-arrow_left"></i>
       </a>

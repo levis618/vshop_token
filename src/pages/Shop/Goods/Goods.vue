@@ -135,20 +135,22 @@ export default {
       foodScroll.scrollTo(0, -this.scrollY, 300)
     },
     initScroll () {
-      if (this.foodScroll) {
-        this.foodScroll.refresh()
-      } else {
-        this.foodScroll = new BScroll('.foods-wrapper', { click: true, probeType: 2 })
-        this.foodScroll.on('scroll', ({ y }) => {
-          this.scrollY = Math.abs(y)
-        })
-      }
+      this.$nextTick(() => {
+        if (this.foodScroll) {
+          this.foodScroll.refresh()
+        } else {
+          this.foodScroll = new BScroll('.foods-wrapper', { click: true, probeType: 2 })
+          this.foodScroll.on('scroll', ({ y }) => {
+            this.scrollY = Math.abs(y)
+          })
+        }
 
-      if (this.menuScroll) {
-        this.menuScroll.refresh()
-      } else {
-        this.menuScroll = new BScroll('.menu-wrapper', { click: true })
-      }
+        if (this.menuScroll) {
+          this.menuScroll.refresh()
+        } else {
+          this.menuScroll = new BScroll('.menu-wrapper', { click: true })
+        }
+      })
     },
     initFoodTops () {
       let top = 0
@@ -163,6 +165,7 @@ export default {
     }
   },
   mounted () {
+    this.initScroll()
   },
   components: {
     Food, CartControl, ShopCart

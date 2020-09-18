@@ -11,7 +11,7 @@ import { reqShopGoods, reqShopRatings, reqShopInfo } from '../../api/index.js'
 
 const state = {
   goods: [],
-  raings: [],
+  ratings: [],
   info: {},
   cartFoods: [],
 }

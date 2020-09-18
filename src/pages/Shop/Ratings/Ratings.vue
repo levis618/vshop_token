@@ -6,130 +6,103 @@
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
-          <h1 class="score">4.7</h1>
+          <h1 class="score">{{info.score}}</h1>
           <div class="title">综合评分</div>
           <div class="rank">高于周边商家 99%</div>
         </div>
         <div class="overview-right">
           <div class="score-wrapper">
             <span class="title">服务态度</span>
-            <!-- <Star
-              :score="4.6"
+            <Star
+              :score="info.serviceScore"
               :size="36"
-            /> -->
-            <div class="star star-36">
-              <span class="star-item on"></span>
-              <span class="star-item on"></span>
-              <span class="star-item on"></span>
-              <span class="star-item half"></span>
-              <span class="star-item off"></span>
-            </div>
-            <span class="score">4.6</span>
+            ></Star>
+            <span class="score">{{info.serviceScore}}</span>
           </div>
           <div class="score-wrapper">
             <span class="title">商品评分</span>
-            <!-- <Star
-              :score="4.7"
+            <Star
+              :score="info.foodScore"
               :size="36"
-            /> -->
-            <div class="star star-36">
-              <span class="star-item on"></span>
-              <span class="star-item on"></span>
-              <span class="star-item on"></span>
-              <span class="star-item half"></span>
-              <span class="star-item off"></span>
-            </div>
-            <span class="score">4.7</span>
+            ></Star>
+            <span class="score">{{info.foodScore}}</span>
           </div>
           <div class="delivery-wrapper">
             <span class="title">送达时间</span>
-            <span class="delivery">30 分钟</span>
+            <span class="delivery">{{info.deliveryTime}} 分钟</span>
           </div>
         </div>
       </div>
       <div class="split"></div>
       <div class="ratingselect">
         <div class="rating-type border-1px">
-          <span class="block positive active">
-            全部<span class="count">30</span>
+          <span
+            class="block positive"
+            :class="{active:selectType===2}"
+            @click="changeSelectType(2)"
+          >
+            全部<span class="count">{{ratings.length}}</span>
           </span>
-          <span class="block positive">
-            满意<span class="count">28</span>
+          <span
+            class="block positive"
+            :class="{active:selectType===0}"
+            @click="changeSelectType(0)"
+          >
+            满意<span class="count">{{pleasedCount}}</span>
           </span>
-          <span class="block negative">
-            不满意<span class="count">2</span>
+          <span
+            class="block negative"
+            :class="{active:selectType===1}"
+            @click="changeSelectType(1)"
+          >
+            不满意<span class="count">{{ratings.length - pleasedCount}}</span>
           </span>
         </div>
-        <div class="switch on">
+        <div
+          class="switch"
+          :class="{on:hasTextType}"
+          @click="changeHasTextType"
+        >
           <span class="iconfont icon-check_circle"></span>
           <span class="text">只看有内容的评价</span>
         </div>
       </div>
       <div class="rating-wrapper">
-        <ul>
-          <li class="rating-item">
+        <ul v-if="ratings.length">
+          <li
+            class="rating-item"
+            v-for="(rating,index) in filterRatings"
+            :key="index"
+          >
             <div class="avatar">
               <img
                 width="28"
                 height="28"
-                src="http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                :src="rating.avatar"
               >
             </div>
             <div class="content">
-              <h1 class="name">aa</h1>
+              <h1 class="name">{{rating.username}}</h1>
               <div class="star-wrapper">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item half"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <!-- <Star
+                <Star
                   :score="5"
                   :size="24"
-                /> -->
-                <span class="delivery">30</span>
+                ></Star>
+                <span class="delivery">{{rating.deliveryTime}}</span>
               </div>
-              <p class="text">不错</p>
+              <p class="text">{{rating.text}}</p>
               <div class="recommend">
-                <span class="iconfont icon-thumb_up"></span>
-                <span class="item">南瓜粥</span>
-                <span class="item">皮蛋瘦肉粥</span>
-                <span class="item">扁豆焖面</span>
+                <span
+                  class="iconfont"
+                  :class="rating.rateType===0 ? 'icon-thumb_up' : 'icon-thumb_down'"
+                ></span>
+                <span
+                  class="item"
+                  v-for="(item,index) in rating.recommend"
+                  :key="index"
+                >{{item}}</span>
               </div>
-              <div class="time">2016-07-23 21:52:44</div>
-            </div>
-          </li>
-          <li class="rating-item">
-            <div class="avatar">
-              <img
-                width="28"
-                height="28"
-                src="http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
-              >
-            </div>
-            <div class="content">
-              <h1 class="name">aa</h1>
-              <div class="star-wrapper">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item half"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <!-- <Star
-                  :score="4"
-                  :size="24"
-                /> -->
-                <span class="delivery">30</span>
-              </div>
-              <p class="text">不错</p>
-              <div class="recommend">
-                <span class="iconfont icon-thumb_down"></span>
-              </div>
-              <div class="time">2016-07-23 21:52:44</div>
+              <div class="time">{{rating.rateTime}}</div>
             </div>
           </li>
         </ul>
@@ -139,99 +112,78 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+import { mapState } from 'vuex'
+import Star from '../../../components/Star/Star.vue'
+
 export default {
   name: 'shopRatings',
+  data () {
+    return {
+      selectType: 2,  // 2全部，0满意，1不满意
+      hasTextType: false // true只看有评论的，false
+    }
+  },
+  computed: {
+    ...mapState({
+      ratings: state => state.shop.ratings,
+      info: state => state.shop.info
+    }),
+    filterRatings () {
+      let { selectType, hasTextType, ratings } = this
+      // 条件1
+      // selectType: 2,  // 2全部，0满意，1不满意
+      // rateType 0满意 1不满意
+      // selectType===2 || selectType===rateType
+
+      // 条件2
+      // hasTextType: false // true只看有评论的，false
+      // text.length
+      // !hasTextType || text.length>0
+      let arr = ratings.filter((rating, index, array) => {
+        let { rateType, text } = rating
+        return (selectType === 2 || selectType === rateType) && (!hasTextType || text.length > 0)
+      })
+      console.log(arr.length)
+      return arr
+    },
+    pleasedCount () {
+      return this.ratings.filter((rating) => rating.rateType === 0).length
+    }
+  },
+  watch: {
+    filterRatings () {
+      this.initScroll()
+    }
+  },
+  methods: {
+    changeSelectType (type) {
+      this.selectType = type
+    },
+    changeHasTextType () {
+      this.hasTextType = !this.hasTextType
+    },
+    initScroll () {
+      this.$nextTick(() => {
+        if (!this.ratingsScroll) {
+          this.ratingsScroll = new BScroll('.ratings', { click: true })
+        } else {
+          this.ratingsScroll.refresh()
+        }
+      })
+    }
+  },
+  components: {
+    Star
+  },
+  mounted () {
+    this.initScroll()
+  },
 }
 </script>
 
 <style lang="stylus" scoped>
 @import '../../../assets/css/mixins.styl';
-
-// 星星的样式
-.star { // 2x图 3x图
-  float: left;
-  font-size: 0;
-
-  .star-item {
-    display: inline-block;
-    background-repeat: no-repeat;
-  }
-
-  &.star-48 {
-    .star-item {
-      width: 20px;
-      height: 20px;
-      margin-right: 22px;
-      background-size: 20px 20px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.on {
-        bg-image('./images/stars/star48_on');
-      }
-
-      &.half {
-        bg-image('./images/stars/star48_half');
-      }
-
-      &.off {
-        bg-image('./images/stars/star48_off');
-      }
-    }
-  }
-
-  &.star-36 {
-    .star-item {
-      width: 15px;
-      height: 15px;
-      margin-right: 6px;
-      background-size: 15px 15px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.on {
-        bg-image('./images/stars/star36_on');
-      }
-
-      &.half {
-        bg-image('./images/stars/star36_half');
-      }
-
-      &.off {
-        bg-image('./images/stars/star36_off');
-      }
-    }
-  }
-
-  &.star-24 {
-    .star-item {
-      width: 10px;
-      height: 10px;
-      margin-right: 3px;
-      background-size: 10px 10px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.on {
-        bg-image('./images/stars/star24_on');
-      }
-
-      &.half {
-        bg-image('./images/stars/star24_half');
-      }
-
-      &.off {
-        bg-image('./images/stars/star24_off');
-      }
-    }
-  }
-}
 
 .ratings {
   position: absolute;
